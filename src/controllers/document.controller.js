@@ -50,11 +50,6 @@ exports.updateDocument = async (req, res) => {
   res.json(updated);
 };
 
-// MANAGER REVIEW
-exports.review = async (req, res) => {
-  const doc = await service.reviewDoc(req.params.id, req.body.status);
-  res.json(doc);
-};
 
 // DELETE
 exports.remove = async (req, res) => {
