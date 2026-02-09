@@ -36,9 +36,14 @@ exports.getAll = async (req, res) => {
 
 // VIEW FILE
 exports.viewDocument = async (req, res) => {
-  const filePath = await service.getPath(req.params.id);
-  res.sendFile(path.resolve(process.cwd(), filePath));
+  const doc = await service.getDocument(req.params.id);
+
+  const buffer = Buffer.from(doc.file_base64, "base64");
+
+  res.setHeader("Content-Type", doc.file_type);
+  res.send(buffer);
 };
+
 
 // UPDATE (HR)
 exports.updateDocument = async (req, res) => {

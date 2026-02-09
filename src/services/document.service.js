@@ -3,21 +3,18 @@ const fs = require("fs");
 const path = require("path");
 
 exports.uploadDoc = async (title, file) => {
+  const base64 = file.buffer.toString("base64");
+
   const { rows } = await db.query(
-    `INSERT INTO documents
-     (title, file_path, file_type, file_size)
+    `INSERT INTO documents (title, file_base64, file_type, file_size)
      VALUES ($1,$2,$3,$4)
-     RETURNING *`,
-    [
-      title,
-      file.path,
-      file.mimetype,
-      file.size
-    ]
+     RETURNING id, title, status`,
+    [title, base64, file.mimetype, file.size]
   );
 
   return rows[0];
 };
+
 
 // READ ALL
 exports.getAllDocs = async () => {
@@ -28,13 +25,14 @@ exports.getAllDocs = async () => {
 };
 
 // GET PATH
-exports.getPath = async (id) => {
+exports.getDocument = async (id) => {
   const { rows } = await db.query(
-    "SELECT file_path FROM documents WHERE id=$1",
+    "SELECT file_base64, file_type FROM documents WHERE id=$1",
     [id]
   );
-  return rows[0].file_path;
+  return rows[0];
 };
+
 
 // UPDATE (HR replaces file + title)
 exports.updateDoc = async (id, title, file) => {
