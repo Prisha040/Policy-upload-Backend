@@ -20,5 +20,18 @@ CREATE TABLE documents (
   reviewed_by TEXT
 );
 
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL
+);
+
+INSERT INTO users (email, password, role)
+VALUES
+('hr@test.com','123456','HR'),
+('manager@test.com','123456','MANAGER'),
+('emp@test.com','123456','EMPLOYEE');
+ 
 
 
