@@ -15,7 +15,7 @@ exports.upload = async (req, res) => {
 
     if (!req.file) {
       return res.status(400).json({
-        message: 'No file received. Use form-data with key "document".'
+        message: 'No file received. Use form-data with key "document".',
       });
     }
 
@@ -23,15 +23,13 @@ exports.upload = async (req, res) => {
 
     return res.status(201).json({
       message: "File uploaded successfully",
-      data
+      data,
     });
-
   } catch (err) {
     console.error("Upload Error:", err);
     return res.status(500).json({ error: err.message });
   }
 };
-
 
 // ==========================
 // READ ALL
@@ -40,18 +38,12 @@ exports.getAll = async (req, res) => {
   try {
     const docs = await service.getAllDocs();
 
-    if (!docs || docs.length === 0) {
-      return res.status(404).json({ message: "No documents found" });
-    }
-
     return res.status(200).json(docs);
-
   } catch (err) {
     console.error("Get All Error:", err);
     return res.status(500).json({ error: err.message });
   }
 };
-
 
 // ==========================
 // VIEW FILE
@@ -74,13 +66,11 @@ exports.viewDocument = async (req, res) => {
 
     res.setHeader("Content-Type", doc.file_type);
     return res.send(buffer);
-
   } catch (err) {
     console.error("View Document Error:", err);
     return res.status(500).json({ error: err.message });
   }
 };
-
 
 // ==========================
 // UPDATE (HR)
@@ -103,7 +93,7 @@ exports.updateDocument = async (req, res) => {
     // 🔹 Validate File (if your update requires file)
     if (!req.file) {
       return res.status(400).json({
-        message: "File is required for update"
+        message: "File is required for update",
       });
     }
 
@@ -115,15 +105,13 @@ exports.updateDocument = async (req, res) => {
 
     return res.status(200).json({
       message: "Document updated successfully",
-      data: updated
+      data: updated,
     });
-
   } catch (err) {
     console.error("Update Error:", err);
     return res.status(500).json({ error: err.message });
   }
 };
-
 
 // ==========================
 // DELETE
@@ -149,9 +137,8 @@ exports.remove = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Document deleted successfully"
+      message: "Document deleted successfully",
     });
-
   } catch (err) {
     console.error("Delete Error:", err);
     return res.status(500).json({ error: err.message });
