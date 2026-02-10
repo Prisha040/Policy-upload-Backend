@@ -17,3 +17,11 @@ CREATE TABLE documents (
   created_at TIMESTAMP DEFAULT now(),
   reviewed_at TIMESTAMP
 );
+
+-- Alter
+
+ALTER TABLE documents
+ADD COLUMN file_base64 TEXT;
+
+ALTER TABLE documents
+ALTER COLUMN file_path DROP NOT NULL;

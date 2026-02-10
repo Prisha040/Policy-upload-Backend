@@ -19,10 +19,11 @@ exports.uploadDoc = async (title, file) => {
 // READ ALL
 exports.getAllDocs = async () => {
   const { rows } = await db.query(
-    "SELECT id, title, status FROM documents"
+    "SELECT id, title, status, file_base64 FROM documents ORDER BY id DESC"
   );
   return rows;
 };
+
 
 // GET PATH
 exports.getDocument = async (id) => {
