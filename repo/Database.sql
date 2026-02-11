@@ -13,6 +13,7 @@ CREATE TABLE documents (
   file_name TEXT NOT  NULL,
   file_type TEXT,
   file_size INT,
+  file_base64 INT,
   status TEXT CHECK (status IN ('pending','approved','rejected')) DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT now(),
   Created_by TEXT,
