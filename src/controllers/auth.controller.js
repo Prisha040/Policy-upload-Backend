@@ -1,7 +1,6 @@
 const service = require("../services/auth.service");
 
 exports.login = async (req, res) => {
-
   const { email, password } = req.body;
 
   if (!email || !password)
@@ -9,8 +8,7 @@ exports.login = async (req, res) => {
 
   const result = await service.login(email, password);
 
-  if (!result)
-    return res.status(401).json({ message: "Invalid credentials" });
+  if (!result) return res.status(401).json({ message: "Invalid credentials" });
 
   res.json(result);
 };

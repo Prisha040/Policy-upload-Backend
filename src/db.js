@@ -8,7 +8,6 @@ const pool = new Pool({
   port: process.env.DB_PORT
 });
 
-// ✅ connection check
 pool.connect()
   .then(client => {
     console.log("PostgreSQL connected");
