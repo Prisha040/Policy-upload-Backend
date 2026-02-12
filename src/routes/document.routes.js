@@ -13,4 +13,9 @@ router.put("/:id", upload.single("document"), controller.updateDocument);
 // DELETE
 router.delete("/:id", controller.remove);
 
+router.get("/employee/approved", controller.getApprovedForEmployee);
+
+router.get("/employee/:id/download", controller.viewDocumentForEmployee);
+
+
 module.exports = router;

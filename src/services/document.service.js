@@ -68,3 +68,27 @@ exports.deleteDoc = async (id) => {
   );
   return rows[0];
 };
+
+exports.getApprovedDocs = async () => {
+  const { rows } = await db.query(
+    "SELECT id, title, status FROM documents WHERE status = 'approved'"
+  );
+  return rows;
+};
+
+exports.getDocumentForEmployee = async (id) => {
+  const { rows } = await db.query(
+    `SELECT file_base64, file_type, status
+     FROM documents
+     WHERE id = $1`,
+    [id]
+  );
+
+  if (!rows.length) return null;
+
+  if (rows[0].status !== "approved") {
+    throw new Error("Document not approved");
+  }
+
+  return rows[0];
+};

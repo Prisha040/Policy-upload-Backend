@@ -48,15 +48,11 @@ exports.getAll = async (req, res) => {
 // ==========================
 // VIEW FILE
 // ==========================
-exports.viewDocument = async (req, res) => {
+exports.viewDocumentForEmployee = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
 
-    if (!id || isNaN(id)) {
-      return res.status(400).json({ message: "Valid document ID is required" });
-    }
-
-    const doc = await service.getDocument(id);
+    const doc = await service.getDocumentForEmployee(id);
 
     if (!doc) {
       return res.status(404).json({ message: "Document not found" });
@@ -65,12 +61,18 @@ exports.viewDocument = async (req, res) => {
     const buffer = Buffer.from(doc.file_base64, "base64");
 
     res.setHeader("Content-Type", doc.file_type);
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=policy.pdf"
+    );
+
     return res.send(buffer);
+
   } catch (err) {
-    console.error("View Document Error:", err);
-    return res.status(500).json({ error: err.message });
+    return res.status(403).json({ message: err.message });
   }
 };
+
 
 // ==========================
 // UPDATE (HR)
@@ -141,6 +143,44 @@ exports.remove = async (req, res) => {
     });
   } catch (err) {
     console.error("Delete Error:", err);
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.getApprovedForEmployee = async (req, res) => {
+  try {
+    const docs = await service.getApprovedDocs();
+    return res.json(docs);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+exports.viewDocument = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ message: "Invalid document id" });
+    }
+
+    // normal view (HR / Manager – no status restriction)
+    const doc = await service.getDocument(id);
+
+    if (!doc) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    const buffer = Buffer.from(doc.file_base64, "base64");
+
+    res.setHeader("Content-Type", doc.file_type);
+    // inline = open in browser/postman
+    res.setHeader("Content-Disposition", "inline; filename=policy.pdf");
+
+    return res.send(buffer);
+
+  } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
